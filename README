@@ -1,0 +1,17 @@
+This is the Victory Chat
+
+In order to run it, you need to install a few things
+
+ - Python
+ - CherryPy 3
+ - Mako Templates
+
+If everything is in order, you can go through the files, change a few
+things and just run test.py.
+
+You might want to change a few things at the bottom of test.py:
+
+ - Make 'log.screen': True
+ - Change the port numer
+
+
