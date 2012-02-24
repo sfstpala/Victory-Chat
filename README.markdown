@@ -2,6 +2,7 @@
 # Victory Chat
 ### Version 2
 
+## [demo](http://chat.plzz.de/)
 
 To run VC, first set up a CouchDB database with HTTP
 Basic Auth enabled and set up a username and password (admin).
