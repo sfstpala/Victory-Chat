@@ -1,0 +1,32 @@
+<%inherit file="base.html"/><% import time %>
+<section class="user box">
+    <h2>${u['name'] or "User " + u['num_id']}</h2>
+    % if user and u["_id"] == user["_id"]:
+    <aside class="edit"><a href="/users/${u['num_id']}/${u['link_name']}/edit/">Edit your profile</a></aside>
+    % endif
+    <img class="gravatar big" src="http://www.gravatar.com/avatar/${u['email_hash']}?s=128&d=identicon&r=PG">
+    <form action="/users/${user['num_id']}/${user['link_name']}/edit/" method="post"> 
+        <table>
+            <tr><td colspan="2"><h3>${"Moderator" if u['is_moderator'] else "Registered User"}</h3></td></tr>
+            <tr><td>Name:</td><td>
+                <input type="text" name="name" value="${u['name'] or "User " + u['num_id']}">
+            </td></tr>
+            <tr><td>Website:</td><td>
+                <input type="text" name="website" value="${u['website'] or ""}">
+            </td></tr>
+            <tr><td>Country:</td><td>
+                <input type="text" name="country" value="${u['country'] or ""}">
+            </td></tr>
+            <tr><td>Birthday:</td><td>
+                <input type="text" name="birthday" value="${u['birthday'] or ""}">
+            </td></tr>
+            <tr><td>About Me:</td><td>
+                <input type="text" name="about" value="${u['about_me'] or ""}">
+            </td></tr>
+            <tr><td></td><td>
+                <input type="submit" value="Save Changes">
+            </td></tr>
+        </table>
+    </form>
+    <aside></aside>
+</section>

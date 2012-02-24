@@ -1,0 +1,28 @@
+<%inherit file="base.html"/>
+<section class="login box">
+    <h2>Login</h2>
+    <p>Please log in using one of your existing accounts. If you don't have an
+        account with any <br>of these providers, try the quick and easy
+        signup at <a target="_blank" href="https://openid.stackexchange.com/account/register">StackExchange</a>.</p>
+    % if error and error == "email":
+    <p class="error">Sorry, your OpenID provider didn't supply an email address.
+        This is required.</p>
+    % elif error and error == "taken" and provider:
+    <p class="error">Sorry, we already have a user with your email address.
+        If this is you, please log in with your <strong>${provider}</strong> account.</p>
+    % elif error and error == "taken":
+    <p class="error">Sorry, we already have a user with your email address.
+        If this is you, please log in with your existing account.</p>
+    % elif error:
+    <p class="error" title="${error}">Sorry, something went wrong while logging in.
+        Please try again, or use another account</p>
+    % endif
+    <ul>
+        <li><a class="go" href="/login?provider=google"><img src="/static/img/google.ico"><span>Google</span></a></li>
+        <li><a class="go" href="/login?provider=launchpad"><img src="/static/img/launchpad.ico"><span>Lauchpad</span></a></li>
+        <li><a class="go" href="/login?provider=myopenid"><img src="/static/img/myopenid.ico"><span>myOpenID</span></a></li>
+        <li><a class="go" href="/login?provider=stackexchange"><img src="/static/img/stackexchange.ico"><span>StackExchange</span></a></li>
+        <li><a class="go" href="/login?provider=ubuntu"><img src="/static/img/ubuntu.ico"><span>Ubuntu</span></a></li>
+        <li><a class="go" href="/login?provider=yahoo"><img src="/static/img/yahoo.ico"><span>Yahoo</span></a></li>
+    </ul>
+</section>

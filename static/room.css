@@ -1,0 +1,336 @@
+body {
+    margin: 0;
+    font: 13px sans-serif;
+    color: #222;
+}
+pre, code {
+    font: 11px 'Droid Sans Mono';
+}
+code {
+    padding: 2px;
+    background: #ddd;
+}
+pre code {
+    padding: inherit;
+    background: none;
+}
+a {
+    color: #36a;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+section.chat {
+    position: absolute;
+    top: 0;
+    right: 344px;
+    bottom: 116px;
+    left: 0;
+    padding: 12px;
+    overflow: auto;
+}
+section.sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 116px;
+    width: 320px;
+    padding: 12px;
+    overflow-y: auto;
+}
+section.sidebar h1 {
+    margin: 0;
+}
+section.controls {
+    background: #eee;
+    position: absolute;
+    height: 91px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 12px;
+    border-top: 1px solid #ccc;
+}
+table.messages {
+    margin: -12px;
+    border-spacing: 8px;
+    margin-bottom: 12px;
+    margin-right: 4px;
+    margin-top: 2px;
+    border-collapse: collapse;
+}
+td.user {
+    display: inline-block;
+    width: 140px;
+    text-align: right;
+    font-size: smaller !important;
+    padding-top: 4px;
+    padding-bottom: 2px;
+    padding-right: 12px;
+}
+tr.again td.message {
+}
+tr.sep {
+    margin-top: 8px;
+    border-top: 2px solid white;
+}
+tr.sep td {
+    min-height: 24px;
+}
+tr.again .date {
+    visibility: hidden;
+}
+td.user.again {
+    visibility: hidden;
+}
+td {
+    border-bottom: 2px solid transparent;
+}
+td.user img {
+    width: 16px;
+    height: 16px;
+    margin-bottom: -4px;
+    margin-left: 4px;
+}
+td.message {
+    background: #eee;
+    width: 100%;
+}
+img.me {
+    margin: 10px 9px 9px 9px;
+    border: 1px solid #aaa;
+    padding: 1px;
+    float: left;
+}
+textarea {
+    float: left;
+    display: inline-block;
+    width: 400px;
+    height: 64px;
+    margin: 9px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    background: #f7f7f7;
+}
+textarea:hover, textarea:focus {
+    background: #fff;
+    border: 1px solid #999;
+}
+section.controls a.button {
+    float: left;
+    margin-top: 54px;
+    margin-right: 8px;
+}
+a.button {
+    display: inline-block;
+    width: 96px;
+    height: 24px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    line-height: 24px;
+    text-align: center;
+    background: #f7f7f7;
+}
+a.button:hover {
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #999;
+}
+div.msg-controls {
+    height: 16px;
+    float: right;
+    margin-top: -24px;
+    margin-right: 8px;
+    padding: 4px;
+}
+div.date {
+    height: 16px;
+    font-size: smaller;
+    float: right;
+    margin-top: -24px;
+    margin-right: 5px;
+    padding: 5px 8px 1px 4px;
+}
+td.message:hover {
+    background: #ddd;
+}
+td.message:hover div.msg-controls a {
+    -webkit-transition: color 0.2s ease-out;
+    color: black;
+}
+td.message:hover div.msg-controls a:hover {
+    color: #36f;
+}
+div.msg-controls a {
+    color: #eee;
+    padding: 8px;
+    margin: -8px 2px -8px 2px;
+}
+div.msg-controls a.unstar {
+    color: #111;
+}
+div.msg-controls a:hover {
+    text-decoration: none;
+}
+a.flag {
+    font-size: 10px;
+}
+a.delete {
+    font-size: 9px;
+}
+ul.stars {
+    padding: 0;
+    list-style: none;
+    font-size: smaller;
+}
+ul.stars li {
+    margin-bottom: 4px;
+    background: #eee;
+    border-radius: 4px;
+    padding: 4px;
+}
+ul.stars p, ul.stars pre {
+    display: inline;
+}
+a.star {
+    color: black;
+}
+a.unstar {
+    color: #36f !important;
+}
+a.star:hover, a.unstar:hover {
+    color: #36f;
+    text-decoration: none;
+}
+ul.users {
+    padding: 0;
+    list-style: none;
+}
+ul.users li {
+    display: inline;
+}
+.highlight {
+    border-radius: 0;
+    outline: 2px solid #bbb;
+}
+.forme .msg-controls a {
+    color: #fdd;
+}
+.forme {
+    background: #fdd !important;
+    cursor: pointer;
+}
+.repl {
+    font-size: 10px;
+    color: #777;
+    float: left;
+    display: none;
+}
+.ownmessage {
+    background: #fff !important;
+}
+.ownmessage section.md {
+}
+.ownmessage.forme {
+    cursor: auto !important;
+}
+.ownmessage .date {
+    opacity: 0.7;
+}
+.ownmessage:hover .date {
+    opacity: 1.0;
+}
+div#problem {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 12px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    left: 0;
+    border-bottom: 1px solid #aaa;
+    background: #fff;
+    opacity: 0.9;
+}
+section.md.starred {
+    display: inline;
+}
+section.md.starred * {
+    display: inline;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+    white-space: normal;
+}
+section.md h1, section.md h2, section.md h3, section.md h4, section.md h5, section.md h6 {
+    font-size: 13px;
+    display: inline-block;
+    margin: 0;
+    padding: 4px;
+}
+section.md p {
+    margin: 0;
+    padding: 4px;
+    display: inline-block;
+}
+section.md pre {
+    margin: 0;
+    padding: 4px;
+    display: inline-block;
+}
+section.md ul {
+    padding: 4px;
+    list-style: none;
+}
+section.md ul li {
+    display: inline-block;
+}
+section.md img {
+    max-width: 400px;
+    max-height: 220px;
+}
+section.sidebar section.md img {
+    max-width: 240px;
+    max-height: 24px;
+}
+input#user_url {
+    padding: 2px;
+    width: 200px;
+    border: 1px solid #ccc;
+}
+.mystar {
+    color: #888;
+}
+hr {
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+.disabled {
+    color: #ccc;
+}
+section.sidebar p, section.sidebar h3 {
+    margin: 0;
+}
+section.chat section.md {
+    margin-right: 88px;
+}
+section.sidebar audio {
+    height: 12px;
+}
+section.sidebar iframe {
+    max-width: 240px;
+    max-height: 12px;
+}
+section.md p {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}

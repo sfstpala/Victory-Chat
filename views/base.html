@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <title>VictoryChat</title>
+        <link rel="stylesheet" href="/static/main.css" type="text/css">
+        <script type="text/javascript" src="/static/jquery.min.js"></script>
+        <script>
+            $(function () {
+                $("a.go").click(function () {
+                    $("body").animate({"opacity": "-=0.3"}, 50);
+                    $("body").animate({"opacity": "-=0.3"}, "slow");
+                });
+            });
+        </script>
+    </head>
+    <header>
+        <menu>
+            <div class="pagewidth">
+                <nav>
+                    <ul>
+                        <li><a href="/rooms/">Rooms</a> (${n_rooms})</li>
+                        <li><a href="/users/">Users</a> (${n_users})</li>
+                        <li><a href="/faq/">FAQ</a></li>
+                    </ul>
+                </nav>
+                <div class="login">
+                    % if user:
+                    <a href="/users/${user['num_id']}/${user['link_name']}/"><strong>${user['name'] or "User " + user['num_id']}</strong></a> (<a href="/logout">log out</a>)
+                    % else:
+                    First time here? <a href="/login">Log in.</a>
+                    % endif
+                </div>
+            </div>
+        </menu>
+        <div class="pagewidth">
+            <h1><a href="/">Victory<strong>Chat</strong></a></h1>
+        </div>
+    </header>
+    <div class="pagewidth">
+        <section class="body">${self.body()}    </section>
+    </div>
+    <footer>
+        <div class="pagewidth">
+            VictoryChat 2 — Revision ${revision}
+        </div>
+    </footer>
+</html>

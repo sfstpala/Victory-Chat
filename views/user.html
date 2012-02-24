@@ -1,0 +1,50 @@
+<%inherit file="base.html"/><% import time %>
+<section class="user box">
+    <h2>${u['name'] or "User " + u['num_id']}</h2>
+    % if user and u["_id"] == user["_id"]:
+    <aside class="edit"><a href="/users/${u['num_id']}/${u['link_name']}/edit/">Edit your profile</a></aside>
+    % endif
+    <img class="gravatar big" src="http://www.gravatar.com/avatar/${u['email_hash']}?s=128&d=identicon&r=PG">
+    <table>
+        <tr><td colspan="2"><h3>${"Moderator" if u['is_moderator'] else "Registered User"}</h3></td></tr>
+        <tr><td>Name:</td><td>
+            <strong>${u['name'] or "User " + u['num_id']}</strong>
+        </td></tr>
+        <tr><td>Member for:</td><td>
+            <span title="${time.strftime("%Y-%m-%d %H:%MZ", time.gmtime(u['creation_date']))}">${fuzzy_delta(time.time() - u['creation_date'])}</span>
+        </td></tr>
+        <tr><td>Website:</td><td>
+            ${"<a href=\"" + u["website"] + "\">" + u['website'] + "</a>" if u["website"] else ""}
+        </td></tr>
+        <tr><td>Last Seen:</td><td>
+            <span title="${time.strftime("%Y-%m-%d %H:%MZ", time.gmtime(u['last_seen_date']))}">${fuzzy_delta(time.time() - u['last_seen_date'])} ago</span>
+        </td></tr>
+        <tr><td>Country:</td><td>
+            ${u['country'] or ""}
+        </td></tr>
+        <tr><td>Birthday:</td><td>
+            ${u['birthday']}
+        </td></tr>
+        <tr><td>Rooms:</td><td>
+            ${len(u['owns_rooms'])} room${"s" if len(u['owns_rooms']) != 1 else ""}
+        </td></tr>
+        <tr><td>About Me:</td><td>
+            ${u['about_me'] or ""}
+        </td></tr>
+        % if user and u["_id"] == user["_id"]:
+        <tr><td>Email Address</td><td>
+            ${u['email']}
+        </td></tr>
+        <tr><td>Last login:</td><td>
+            <span title="${time.strftime("%Y-%m-%d %H:%MZ", time.gmtime(u['last_login_date']))}">${fuzzy_delta(time.time() - u['last_login_date'])} ago</span> from ${u['last_login_ip']}
+        </td></tr>
+        <tr><td>OpenID Provider</td><td>
+            ${u['openid_provider']}
+        </td></tr>
+        <tr><td></td><td>
+            <br>
+        </td></tr>
+        % endif
+    </table>
+    <aside></aside>
+</section>

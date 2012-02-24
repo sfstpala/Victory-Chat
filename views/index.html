@@ -1,0 +1,17 @@
+<%inherit file="base.html"/>
+<section class="index box">
+    <h2>Hello</h2>
+    % if not user:
+    <p><a href="/login">Please log in to get going</a></p>
+    % endif
+    <p>This is a public preview of the Victory Chat system. Please don't hesitate to use it for any purpose. Every little bit of testing helps me make this app better.</p>
+    <p>If you have feedback on the software, if you have found a bug or if you want to request a feature, you can leave a message in one of the chat rooms, talk to
+        <a href="https://plus.google.com/113077604937145555820">me on google+</a>, or send an email to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#116;&#101;&#102;&#97;&#110;&#111;&#46;&#112;&#97;&#108;&#97;&#122;&#122;&#111;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#115;&#116;&#101;&#102;&#97;&#110;&#111;&#46;&#112;&#97;&#108;&#97;&#122;&#122;&#111;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a>.</p>
+    <p>This app is proudly powered by <a href="http://www.python.org/">Python 3.2</a>, <a href="http://www.cherrypy.org/">CherryPy</a>, <a href="http://couchdb.apache.org/">Apache CouchDB</a>,
+        <a href="http://www.makotemplates.org/">Mako Templates</a>, <a href="http://www.ubuntu.com/">Ubuntu Server</a>, 
+        John Gruber's <a href="http://daringfireball.net/projects/markdown/">Markdown</a>, Martin von Löwis' <a href="http://pypi.python.org/pypi/openid2rp">openid2rp</a>,
+        and <a href="http://gravatar.com">Gravatar</a>. Special thanks go to the wonderful people at <a href="http://askubuntu.com/">Ask&nbsp;Ubuntu</a>, who always provide the most helpful feedback.
+    % if user:
+    <p><strong><a href="/rooms">See the list of rooms</a></strong></p>
+    % endif
+</section>

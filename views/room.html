@@ -1,0 +1,383 @@
+<!doctype html><% import time %>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <title>VictoryChat</title>
+        <link rel="stylesheet" href="/static/room.css" type="text/css">
+        <script type="text/javascript" src="/static/jquery.min.js"></script>
+        <script>
+var is_focus = true;
+var old_users = {};
+var old_stars = {};
+var very_fuzzy_delta = function (delta) {
+    var minute = 60,
+        hour = minute * 60,
+        day = hour * 24,
+        week = day * 7;
+    var fuzzy;
+    if (delta < 30) {
+        fuzzy = '';
+    } else if (delta < minute) {
+        fuzzy = '';
+    } else if (delta < 5 * minute) {
+        fuzzy = ''
+    } else if (delta < 20 * minute) {
+        fuzzy = '15 minutes ago'
+    } else if (delta < 40 * minute) {
+        fuzzy = 'half an hour ago'
+    } else if (delta < 80 * minute) {
+        fuzzy = 'an hour ago'
+    } else if (Math.floor(delta / hour) == 1) {
+        fuzzy = 'an hour ago'
+    } else if (delta < day) {
+        fuzzy = Math.floor(delta / hour) + ' hours ago';
+    } else if (delta < day * 2) {
+        fuzzy = 'yesterday';
+    } else if (delta < day * 3) {
+        fuzzy = Math.floor(delta / day) + ' days ago';
+    }
+    return fuzzy;
+};
+var fuzzy_delta = function (delta) {
+    var minute = 60,
+        hour = minute * 60,
+        day = hour * 24,
+        week = day * 7;
+    var fuzzy;
+    if (delta < 30) {
+        fuzzy = '';
+    } else if (delta < minute) {
+        fuzzy = '';
+    } else if (delta < 2 * minute) {
+        fuzzy = ''
+    } else if (delta < hour) {
+        fuzzy = Math.floor(delta / minute) + ' minutes ago';
+    } else if (Math.floor(delta / hour) == 1) {
+        fuzzy = '1 hour ago'
+    } else if (delta < day) {
+        fuzzy = Math.floor(delta / hour) + ' hours ago';
+    } else if (delta < day * 2) {
+        fuzzy = 'yesterday';
+    } else if (delta < day * 3) {
+        fuzzy = Math.floor(delta / day) + ' days ago';
+    }
+    return fuzzy;
+};
+var last_date = "";
+var update_dates = function () {
+    var foo = new Date;
+    var unixtime_ms = foo.getTime();
+    var unixtime = parseInt(unixtime_ms / 1000);
+    $(".nice-date").html(function () {
+        secs = unixtime - parseFloat($(this).attr("date"));
+        var f = very_fuzzy_delta(secs);
+        if (f != last_date) {
+            last_date = f;
+            return f;
+        } else {
+            return "";
+        }
+    });
+    $(".nice-date.s").html(function () {
+        secs = unixtime - parseFloat($(this).attr("date"));
+        return fuzzy_delta(secs);
+    });
+    setTimeout(update_dates, 500);
+};
+var get_star_link = function (msg) {
+    return "<a title=\"Remove your star\" class=\"unstar\" href=\"javascript:void(0)\" id=\"unst_" + msg["_id"] + "\">★</a>" + 
+        "<a title=\"This message is useful or interesting\" class=\"star\" href=\"javascript:void(0)\" id=\"star_" + msg["_id"] + "\">★</a>";
+}
+var get_star_link2 = function (msg) {
+    return "<a title=\"Remove your star\" class=\"unstar\" href=\"javascript:void(0)\" id=\"uns2_" + msg["_id"] + "\">★</a>" + 
+        "<a title=\"This message is useful or interesting\" class=\"star\" href=\"javascript:void(0)\" id=\"sta2_" + msg["_id"] + "\">★</a>";
+}
+var get_box = function (msg, last_msg) {
+    if (msg["user"]["num_id"] == last_msg["user"]["num_id"]) {
+        var cls = " again"; } else { var cls = " sep"; }
+    return (
+        "<tr class=\"" + cls + "\">" + 
+            "<td class=\"user" + cls + "\">" + 
+                "<a href=\"/users/" + msg["user"]["num_id"] + "/" + msg["user"]["link_name"] +
+                    "/\" target=\"_blank\">" + (msg["user"]["name"] || ("User " + msg["user"]["num_id"])) +
+                    "</a> <img src=\"http://www.gravatar.com/avatar/" + msg["user"]["email_hash"] +
+                    "?s=16&d=identicon&r=PG\">" +
+            "</td>" +
+            "<td class=\"message\" id=\"m_" + msg["num_id"] + "\">" +
+                "<div class=\"repl\">↑</div><section class=\"md\">" + (msg["prepend"] || "") + " " + msg["markdown"] + "</section>" +
+            "<div class=\"msg-controls\">" + 
+            get_star_link(msg) +
+            "<a class=\"reply\" -data-mid=\"" + msg["num_id"] + "\" href=\"javascript:void(0)\" id=\"repl_" + msg["_id"] + "\">⬋</a>" +
+            "</div><div class=\"date\" id=\"date_" + msg["_id"] + "\">" +
+            "<span class=\"nice-date\" date=\"" + msg['date'] + "\" title=\"" + msg['nice_date'] + "\">" + msg['nice_date'] + "</span>" +
+            "</div></td>" +
+        "</tr>"
+    )
+};
+var get_star = function (msg) {
+    return "<li> " + msg["stars"].length + " " + get_star_link2(msg) + " <section class=\"md starred\">" + msg["markdown"] + "</section>" +
+        " — " + "<span class=\"nice-date s\" date=\"" + msg['date'] + "\" title=\"" + msg['nice_date'] + "\">" + msg['nice_date'] + "</span>" + " by " +
+        "<a href=\"/users/" + msg["user"]["num_id"] + "/" + msg["user"]["link_name"] +
+        "/\" target=\"_blank\">" + msg["user"]["name"] +
+        "</a>" + "</li>";
+};
+var bind_stars = function () {
+    $('a.star').unbind("click");
+    $("a.star").click(function (e) {
+        e.stopImmediatePropagation();
+        var m_id = $(this).attr("id").slice(5);
+        $.get("/star/${room['num_id']}/" + m_id, function (res) {
+            if (res == true) {
+                $("#unst_" + m_id).show();
+                $("#star_" + m_id).hide();
+                $("#date_" + m_id).attr("old-data", $("#date_" + m_id).html());
+                $("#date_" + m_id).html("");
+            }
+        });
+    });
+    $('a.unstar').unbind("click");
+    $("a.unstar").click(function (e) {
+        e.stopImmediatePropagation();
+        var m_id = $(this).attr("id").slice(5);
+        $.get("/unstar/${room['num_id']}/" + m_id, function (res) {
+            if (res == true) {
+                $("#unst_" + m_id).hide();
+                $("#star_" + m_id).show();
+                $("#date_" + m_id).html($("#date_" + m_id).attr("old-data"));
+            }
+        });
+    });
+    $('a.reply').unbind("click");
+    $("a.reply").click(function (e) {
+        event.stopImmediatePropagation();
+        $("#message").focus()
+        var f = "::" + $(this).attr("-data-mid").split(" ")[0];
+        if ($("#message").val().indexOf(f) == -1) {
+            $("#message").val(f + " " + $("#message").val());
+        }
+    });
+    $('td.message').unbind("hover");
+    $("td.message").hover(function () {
+        if (!$(this).hasClass("ownmessage")) {
+            $(this).children(".date").fadeOut(100);
+       }
+    }, function () {
+        if (!$(this).hasClass("ownmessage")) {
+            $(this).children(".date").fadeIn(100);
+       }
+    });
+};
+$(function () {
+    $("#problem").hide();
+    var audible_ping = true;
+    var first_iteration = true;
+    $(window).blur(function () {
+        is_focus = false;
+    }).focus(function () {
+        is_focus = true;
+    });
+    $("#ping").click(function () {
+        if (audible_ping == true) {
+            audible_ping = false;
+            $(this).html("<span class=\"disabled\">Audible ping</span>");
+        } else {
+            audible_ping = true;
+            $(this).html("Audible ping");
+        }
+    });
+    $("#fixed-font").hide();
+    $('#message').bind('keypress', function(e) {
+        setTimeout(function () {
+            if ($("#message").val().indexOf("\n") != -1) {
+                $("#fixed-font").show('slow');
+            } else {
+                $("#fixed-font").fadeOut('slow');
+            }
+        }, 100);
+        if(e.keyCode==13 && !e.shiftKey) {
+            $("#send-button").click();
+            return false;
+        }
+    });
+    var last_atime = 0.0;
+    $("#send-button").click(function () {
+        if ($("#message").val() != "") {
+            var text = $("#message").val();
+            $("#message").val("");
+            $.post("/post_message", {'message': text,
+                "room": "${room['num_id']}"}, function (res) {
+            });
+            $("#message").focus();
+        }
+    });
+    $("#fixed-font").click(function () {
+        $("#message").val(("    " + $("#message").val().split("\n").join("\n    ")));
+    });
+    var last_message = {'user': {'num_id': undefined}};
+    do_update = function () {
+        $.get("/read_messages", {"room": "${room['num_id']}",
+                "last_atime": last_atime}, function (res) {
+            last_atime = parseFloat(res["last_atime"]) + 0.0001;
+            var do_scroll = false;
+            for (i in res["data"]) {
+                var x = $("table.messages").append(get_box(res["data"][i], last_message));
+                last_message = res["data"][i];
+                var repl = res["data"][i]["reply_to"];
+                if (repl != null) {
+                    $("#m_" + res["data"][i]["num_id"] + " div.repl").show();
+                    $("td#m_" + res["data"][i]["num_id"]).hover(function () {
+                        $("td#m_" + repl).addClass("highlight");
+                    }, function () {
+                        $("td#m_" + repl).removeClass("highlight");
+                    });
+                } else {
+                    $("#m_" + res["data"][i]["num_id"] + " div.repl").hide();
+                }
+                if (res["data"][i]["highlight"].indexOf("${user['num_id']}") != -1) {
+                    $("td#m_" + res["data"][i]["num_id"]).addClass("forme");
+                    if ((audible_ping == true) && (first_iteration == false)) {
+                        (new Audio("/static/ding.wav")).play();
+                    }
+                    notify = true;
+                    $("td#m_" + res["data"][i]["num_id"]).click(function () {
+                        $(this).removeClass("forme");
+                    });
+                };
+                if (res["data"][i]["user"]["num_id"] === "${user['num_id']}") {
+                    $("#m_" + res["data"][i]["num_id"] + " .msg-controls").hide();
+                    $("#m_" + res["data"][i]["num_id"]).addClass("ownmessage");
+                };
+                if (res["data"][i]["stars"].indexOf("${user['num_id']}") != -1) {
+                    $("#star_" + res["data"][i]["_id"]).hide();
+                    $("#date_" + res["data"][i]["_id"]).replaceWith("");
+                    $("#m_" + res["data"][i]["num_id"] + " .msg-controls").show();
+                    $("#unst_" + res["data"][i]["_id"]).show();
+                } else {
+                    $("#star_" + res["data"][i]["_id"]).show();
+                    $("#unst_" + res["data"][i]["_id"]).hide();
+                };
+                do_scroll = true;
+            }
+            if (do_scroll == true) {
+                bind_stars();
+                $('.md a:link').attr("target", "_blank");
+                var d = document.getElementById("chat");
+                setTimeout(function () {
+                    d.scrollTop = d.scrollHeight;
+                }, 250);
+            }
+            first_iteration = false;
+        });
+        $.get("/get_starred", {"room": "${room['num_id']}"}, function (res) {
+            if (res["hash"] != old_stars) {
+                $("ul.stars").html("");
+                for (i in res["data"]) {
+                    $("ul.stars").append(get_star(res["data"][i]));
+                    var el2 = $("#sta2_" + res["data"][i]["_id"]);
+                    var em2 = $("#uns2_" + res["data"][i]["_id"]);
+                    if ((res["data"][i]["stars"].indexOf("${user['num_id']}") != -1)) {
+                        el2.hide();
+                        em2.show();
+                        $("#date_" + res["data"][i]["_id"]).html("");
+                    } else if (res["data"][i]["user"]["num_id"] == "${user['num_id']}") {
+                        em2.hide();
+                        el2.show();
+                        el2.replaceWith("<span class=\"mystar\" title=\"You cannot star your own message\">★</span>");
+                        $("#date_" + res["data"][i]["_id"]).html("");
+                    } else {
+                        el2.show();
+                        em2.hide();
+                        $("#date_" + res["data"][i]["_id"]).html(
+                            "<span class=\"nice-date\" date=\"" + res["data"][i]['date'] +
+                            "\" title=\"" + res["data"][i]['nice_date'] + "\">" + res["data"][i]['nice_date'] + "</span>");
+                    }
+                    $('.md a:link').attr("target", "_blank");
+                    bind_stars();
+                }
+                old_stars = res["hash"];
+            }
+            $("#problem").hide();
+        });
+        $.get("/get_user_list/${room['num_id']}", {}, function (res) {
+            if (res["hash"] != old_users) {
+                $("ul.users").html("");
+                for (i in res["data"]) {
+                    $("ul.users").append("<li><a target=\"_blank\" href=\"/users/" +
+                        res["data"][i]["num_id"] + "/" + res["data"][i]["link_name"] +
+                        "\"><img src=\"http://www.gravatar.com/avatar/" +
+                        res["data"][i]["email_hash"] + "?s=32&d=identicon&r=PG" +
+                        "\" title=\"" + res["data"][i]["name"] + "\"</a></li>");
+                }
+                old_users = res["hash"];
+            }
+        });
+        setTimeout(do_update, 2500);
+    };
+    do_update();
+    update_dates();
+    bind_stars();
+    $("#problem").hide();
+    $(document).ajaxError(function () {
+        $("#problem").animate({'height': 'show'}, "slow");
+    });
+    $("a.remove").click(function (e) {
+        if (!confirm("Are you sure you want to remove the user from the room?")) {
+            e.stopImmediatePropagation();
+            return false;
+        }
+    });
+});
+        </script>
+    </head>
+    <div id="problem">There seems to be a problem connecting to the server. <a href="/rooms/${room['num_id']}/${room['link_name']}/">Click here</a> to refresh the page.</div>
+    <section class="chat" id="chat">
+        <table class="messages">
+            <tr><td></td><td><a href="/transcript/${room['num_id']}/${room['link_name']}/">view complete transcript</a></td></tr>
+        </table>
+    </section>
+    <section class="sidebar">
+        <h1>
+        % if room["type"] == "private":
+        <img src="/static/lock.png" title="Private Room">
+        % endif
+        ${room["name"]}</h1>
+        <p>${room["desc"]}</p>
+        <hr>
+        <p>
+            <a title="Open the list of all rooms in a new tab" href="/rooms" target="_blank" class="button">All rooms</a>
+            <a title="Toggle the audible ping sound" href="javascript:void(0)" id="ping" class="button">Audible ping</a>
+            <a title="Leave this room" href="/rooms" class="button">Leave</a>
+        </p>
+        <hr>
+        <h3>Users</h3>
+        <ul class="users">
+
+        </ul>
+        <hr>
+        <ul class="stars">
+            
+        </ul>
+        % if room["type"] == "private" and user["_id"] == room["owner"]:
+        <hr>
+        <p><small>This is a private room. The following users are allowed to enter:
+            <ul>
+                % for u in room["users"]:
+                <li><a target="_blank" href="/users/${u['num_id']}/${u['link_name']}/">${u["name"]}</a> ${"(room owner)" if u["_id"] == room["owner"] else ('(<a class="remove" href="/remove_user_from_room/' + room['num_id'] + '/' + u['num_id'] + '">remove</a>)') if user["_id"] == room["owner"] else ""}</li>
+                % endfor
+            </ul>
+        <hr>
+        <form action="/add_user_to_room/${room['num_id']}/" method="post">
+            <label for="user_url">Add a user by pasting <a href="/users/" target="_blank">their profile url</a>:</label>
+            <input name="user_url" id="user_url" type="text" placeholder="http://${base_url}/users/...">
+            <input type="submit" value="add">
+        </form>
+        </small></p>
+        % endif
+    </section>
+    <section class="controls">
+        <a target="_blank" href="/users/${user['num_id']}/${user['link_name']}"><img class="me" title="${user['name']}" src="http://www.gravatar.com/avatar/${user['email_hash']}?s=64&d=identicon&r=PG"></a>
+        <textarea id="message"></textarea>
+        <a class="button" id="send-button" href="javascript:void(0)">Send</a>
+        <a class="button" id="fixed-font" href="javascript:void(0)">Fixed Font</a>
+    </section>
+</html>

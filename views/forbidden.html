@@ -1,0 +1,12 @@
+<%inherit file="base.html"/>
+<section class="forbidden box">
+    % if user:
+        <h2>Sorry :-(</h2>
+        <p>You don't have access to this room yet</p>
+        <p><a href="/rooms">Go back to the list of rooms</a></p>
+    % else:
+        <h2>Sorry :-(</h2>
+        <p>You don't have access to this room yet</p>
+        <p><a href="/login">Please log in</a></p>        
+    % endif
+</section>

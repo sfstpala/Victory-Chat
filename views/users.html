@@ -1,0 +1,24 @@
+<%inherit file="base.html"/>
+<section class="users box">
+    <h2>Users</h2>
+    <ul class="users">
+    % for u in users:
+        <li>
+            <a href="/users/${u['num_id']}/${u['link_name']}/">
+                <img class="gravatar" src="http://www.gravatar.com/avatar/${u['email_hash']}?s=32&d=identicon&r=PG">
+                <p class="ellipsis" title="${u['name'] or 'User ' + u['num_id']}"><strong>${u['name'] or "User " + u['num_id']}</strong></p>
+                <p class="ellipsis" title="${u['about_me'] or ''}">${u['about_me'] or ""}</p>
+            </a>
+        </li>
+    % endfor
+    </ul>
+    <ul class="pages">
+        % for i in range(1, n_pages + 1):
+            % if i != page:
+            <li><a href="/users/?page=${i}">${i}</a></li>
+            % else:
+            <li><a class="active">${i}</a></li>
+            % endif
+        % endfor
+    </ul>
+</section>

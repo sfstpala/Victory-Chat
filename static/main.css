@@ -1,0 +1,232 @@
+body {
+    margin: 0;
+    font: 13px sans-serif;
+}
+h1, h2, h3, p {
+    margin: 0;
+}
+div.pagewidth {
+    width: 720px;
+    margin: 0 64px;
+}
+a {
+    color: #36a;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+h1 {
+    margin: 16px -12px 12px 0px;
+}
+h1 a {
+    display: inline-block;
+    padding: 12px;
+    color: black;
+    font-weight: normal;
+    font-size: 23px;
+    text-decoration: none;
+}
+h1 a strong {
+    font-weight: normal;
+    color: #36a;
+}
+header menu {
+    padding: 0;
+    margin: 0;
+    color: #444;
+    background: #eee;
+    border-bottom: 1px solid #ccc;
+    height: 32px;
+    line-height: 35px;
+}
+header menu div.login {
+    float: right;
+    margin-top: -1px;
+}
+header menu nav {
+    float: left;
+}
+header menu nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+header menu nav ul li {
+    display: inline-block;
+    margin-right: 12px;
+}
+section.login ul {
+    padding: 0;
+    list-style: none;
+    width: 522px;
+}
+section.login ul li {
+    margin: 8px;
+    display: inline-block;
+}
+section.login ul li a {
+    display: inline-block;
+    padding: 12px 20px 12px 12px;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 1px 1px 3px #999;
+    border: 1px solid transparent;
+    color: black;
+    text-decoration: none;
+}
+section.login ul li a:hover {
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px #999;
+    color: #36a;
+}
+section.login ul li a img {
+    display: inline-block;
+    margin-bottom: -4px;
+    margin-right: 5px;
+}
+p.error {
+    margin: 20px 8px 8px 8px;
+    color: #c24;
+}
+img.gravatar {
+    padding: 2px;
+    box-shadow: 1px 1px 3px #888;
+}
+img.gravatar.big {
+    margin: 12px 24px 24px 0px;
+    width: 128px;
+    height: 128px;
+    float: left;
+}
+section.user table {
+    margin: 6px 12px;
+}
+section.user table tr td {
+    padding: 4px;
+}
+section.user table tr td:first-child {
+    width: 110px;
+    color: #333;
+}
+section.user table tr td:last-child {
+
+}
+section.user aside.edit {
+    float: right;
+    margin-top: -1.5em;
+}
+section.user aside {
+    clear: both;
+}
+pre {
+    overflow-x: auto;
+}
+
+section.box {
+    padding: 12px 24px 12px 24px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px #ccc;
+}
+section.box p {
+    margin-top: 8px;
+}
+section.new table {
+    margin: 12px;
+}
+section.new table tr td:first-child {
+    width: 160px;
+    color: #333;
+}
+input[type=text] {
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 260px;
+}
+input[type=text]:focus {
+    outline: 1px solid #c24;
+}
+input {
+    margin-bottom: 5px;
+}
+input[type=submit] {
+    padding: 5px;
+}
+section.new table p {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+footer {
+    margin-top: 64px;
+    font-size: smaller;
+    color: #666;
+    text-align: center;
+}
+ul.pages {
+    clear: left;
+    padding: 0;
+    list-style: none;
+}
+ul.pages li {
+    display: inline-block;
+}
+ul.pages li a {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+ul.pages li a.active {
+    color: #777;
+    border: 1px solid #eee;
+}
+ul.pages li a.active:hover {
+    text-decoration: none;
+}
+ul.users {
+    padding: 0;
+    list-style: none;
+}
+ul.users li {
+    clear: left;
+    display: inline-block;
+    margin: 12px;
+    padding: 12px 12px 0 12px;
+    box-shadow: 1px 1px 3px #ccc;
+    min-width: 240px;
+}
+ul.users li a img.gravatar {
+    margin-bottom: 12px;
+    margin-right: 12px;
+    float: left;
+}
+ul.rooms {
+    padding: 0;
+    list-style: none;
+}
+ul.rooms li {
+    clear: left;
+    display: inline-block;
+    margin: 12px;
+    padding: 12px 12px 0 12px;
+    box-shadow: 1px 1px 3px #ccc;
+    min-width: 280px;
+    padding-bottom: 12px;
+}
+p.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	width: 283px;
+	text-overflow: ellipsis;
+}
+ul.users p.ellipsis {
+	width: 180px;
+}
+ul.users p, ul.rooms p {
+    margin-top: 0;
+}
+.private a {
+    color: #999;
+}

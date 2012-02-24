@@ -1,0 +1,37 @@
+<%inherit file="base.html"/>
+<section class="new box">
+    <h2>Create a new room</h2>
+    <form action="/new" method="post">
+        <table class="new">
+            <tr><td colspan="2">
+                <p>Please check for <a href="/rooms">similar rooms</a> before creating a new one.</p>
+            </td></tr>
+            <tr>
+                <td><label for="room_name">Room Name:</label></td>
+                <td><input required type=text name="room_name" id="room_name"
+                    placeholder="A descriptive, short name for the room"></td>
+            </tr>
+            <tr>
+                <td><label for="description">Description:</label></td>
+                <td><input required type=text name="description" id="description"
+                    placeholder="A short description of the room topic"></td>
+            </tr>
+            <tr>
+                <td><label>Room Type:</label></td>
+                <td>
+                    <input checked type=radio name="room_type" id="room_type_public" value="public">
+                    <label for="room_type_public">Public (anyone can read and write)</label><br>
+                    <input type=radio name="room_type" id="room_type_private" value="private">
+                    <label for="room_type_private">Private (only approved users can read or write)</label><br>
+                </td>
+            </tr>
+            <tr><td></td><td>
+                <p>All conversations are logged and stored.<br>Please see the <a href="/faq/">FAQ</a> for more information.</p>
+            </td></tr>
+            <tr>
+                <td></td>
+                <td><input type=submit value="Create Room"></td>
+            </tr>
+        </table>
+    </form>
+</section>

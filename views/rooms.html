@@ -1,0 +1,31 @@
+<%inherit file="base.html"/>
+<section class="rooms box">
+    <h2>Rooms</h2>
+    <ul class="rooms">
+    % for r in rooms:
+        <li${" class=\"private\"" if r["type"] == "private" else ""}>
+            <a href="/rooms/${r['num_id']}/${r['link_name']}/">
+                <p class="ellipsis" title="${r['name'] or 'Room ' + r['num_id']} (${r['n_messages'] or "0"} Message${"s" if r['n_messages'] != 1 else ""})"><strong>${"⚷ " if r["type"] == "private" else ""}${r['name'] or "Room " + r['num_id']} (${r['n_messages'] or "0"} Message${"s" if r['n_messages'] != 1 else ""})</strong></p>
+                <p class="ellipsis" title="${r['desc'] or ''}">${r['desc'] or ""}</p>
+            </a>
+            % if r["chatting"]:
+            <p>${r["chatting"]} user${"s" if r["chatting"] != 1 else ""} talking</p>
+            % else:
+            <p>&nbsp;</p>
+            % endif
+        </li>
+    % endfor
+    </ul>
+    % if user:
+    <p><a href="/new">Create a new room</a></p>
+    % endif
+    <ul class="pages">
+        % for i in range(1, n_pages + 1):
+            % if i != page:
+            <li><a href="/rooms/?page=${i}">${i}</a></li>
+            % else:
+            <li><a class="active">${i}</a></li>
+            % endif
+        % endfor
+    </ul>
+</section>
